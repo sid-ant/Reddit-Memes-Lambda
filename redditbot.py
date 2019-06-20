@@ -40,10 +40,14 @@ def get_dem_memes():
 # query database
 def get_chats():
     try:
+        subsribers = []
         chats = table.scan(AttributesToGet=['chatid'])
         logger.info(f"chats type xx is {type(chats)} and value is {chats}")
-        for chat in chats:
-            logger.info(f"chat type is {type(chat)} and value is {chat}")
+        for items in chats['Items']:
+            chat_id = items['chatid']
+            subsribers.append(chat_id)
+        logger.info(f"all subs are {subsribers}")
+        return subsribers
     except:
         logger.info("couldn't query db to get chats")
     return None
