@@ -2,15 +2,19 @@ import praw
 import os
 import logging
 import requests 
+import boto3 
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
+
+db = boto3.resource('dynamodb')
+table = db.Table('Chats')
 
 def lambda_handler(event,context):
     try:
         dank = get_dem_memes()
         subsribers = get_chats()
-        boys_go_deliver(dank,subsribers)
+        #boys_go_deliver(dank,subsribers)
     except:
         logger.log("opps, something bad happened")
         raise
@@ -29,11 +33,18 @@ def get_dem_memes():
         if submission.find("i.redd.it")!=-1:
             memes.append(submission.url)
     memes = memes[:5]
+    logger.info(f"Got memes from reddit {memes}")
     return memes    
 
 
 # query database
 def get_chats():
+    try:
+        chats = table.scan(AttributesToGet=['chatid'])
+        for chat in chats:
+            logger.info(f"chat type is {type(chat)} and value is {chat}")
+    except:
+        logger.info("couldn't query db to get chats")
     return None
 
 
