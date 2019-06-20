@@ -1,0 +1,4 @@
+.idea/ 
+.vscode/
+v-env/
+test.py

@@ -16,7 +16,7 @@ def lambda_handler(event,context):
         subsribers = get_chats()
         #boys_go_deliver(dank,subsribers)
     except:
-        logger.log("opps, something bad happened")
+        logger.info("opps, something bad happened")
         raise
     
 def get_dem_memes():
@@ -30,7 +30,7 @@ def get_dem_memes():
     logger.info(f"The reddit is in {reddit.read_only}")
     memes=[]
     for submission in reddit.subreddit("memes").top('hour',limit=10):
-        if submission.find("i.redd.it")!=-1:
+        if submission.url.find("i.redd.it")!=-1:
             memes.append(submission.url)
     memes = memes[:5]
     logger.info(f"Got memes from reddit {memes}")
@@ -41,6 +41,7 @@ def get_dem_memes():
 def get_chats():
     try:
         chats = table.scan(AttributesToGet=['chatid'])
+        logger.info(f"chats type xx is {type(chats)} and value is {chats}")
         for chat in chats:
             logger.info(f"chat type is {type(chat)} and value is {chat}")
     except:
